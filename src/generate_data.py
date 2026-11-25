@@ -4,6 +4,7 @@ import pandas as pd
 np.random.seed(42)
 
 N_TICKETS = 5000
+REPORTING_CUTOFF = pd.Timestamp("2026-11-25 23:59:59")
 
 # -------------------------
 # Reference data
@@ -182,6 +183,25 @@ for i in range(N_TICKETS):
             resolution_timestamp
             + pd.Timedelta(minutes=closure_delay)
         )
+
+    # Apply the reporting cutoff so the dataset represents a snapshot.
+    if pd.notna(response_timestamp) and response_timestamp > REPORTING_CUTOFF:
+        response_timestamp = pd.NaT
+
+    if pd.notna(resolution_timestamp) and resolution_timestamp > REPORTING_CUTOFF:
+        resolution_timestamp = pd.NaT
+        closure_timestamp = pd.NaT
+        status = "In Progress" if pd.notna(response_timestamp) else "Open"
+        ticket_statuses[i] = status
+
+    if pd.notna(closure_timestamp) and closure_timestamp > REPORTING_CUTOFF:
+        closure_timestamp = pd.NaT
+        ticket_statuses[i] = "Resolved"
+
+    # If a response was cut off, ensure the ticket snapshot reflects that.
+    if pd.isna(response_timestamp) and status in ["In Progress", "Pending"]:
+        status = "Open"
+        ticket_statuses[i] = status
 
     first_response_at.append(response_timestamp)
     resolved_at.append(resolution_timestamp)

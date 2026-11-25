@@ -1,0 +1,23 @@
+CREATE TABLE IF NOT EXISTS tickets (
+    ticket_id TEXT PRIMARY KEY,
+    client TEXT,
+    service TEXT,
+    category TEXT,
+    subcategory TEXT,
+    priority TEXT,
+    status TEXT,
+    assigned_team TEXT,
+    channel TEXT,
+    created_at TEXT,
+    first_response_at TEXT,
+    resolved_at TEXT,
+    closed_at TEXT,
+    response_deadline TEXT,
+    resolution_deadline TEXT,
+    first_response_minutes REAL,
+    resolution_minutes REAL,
+    response_sla_met INTEGER,
+    resolution_sla_met INTEGER,
+    reopen_count INTEGER,
+    is_reopened INTEGER
+);

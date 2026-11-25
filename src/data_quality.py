@@ -1,11 +1,14 @@
 import json
 from datetime import datetime
+from pathlib import Path
 
 import pandas as pd
 
 
-DATA_PATH = "data/tickets.csv"
-REPORT_PATH = "data/processed/data_quality_report.json"
+BASE_DIR = Path(__file__).resolve().parent.parent
+DATA_PATH = BASE_DIR / "data" / "tickets.csv"
+REPORT_PATH = BASE_DIR / "data" / "processed" / "data_quality_report.json"
+REPORTING_CUTOFF = pd.Timestamp("2026-11-25 23:59:59")
 
 
 def load_data():
@@ -62,6 +65,18 @@ def check_timestamp_integrity(df):
         ).sum(),
     }
 
+    return checks
+
+
+def check_reporting_cutoff(df):
+    """Count lifecycle timestamps beyond the fixed snapshot cutoff."""
+
+    checks = {}
+    for column in ["first_response_at", "resolved_at", "closed_at"]:
+        timestamps = pd.to_datetime(df[column], errors="coerce")
+        checks[f"Future timestamps in {column}"] = int(
+            (timestamps > REPORTING_CUTOFF).sum()
+        )
     return checks
 
 
@@ -210,6 +225,7 @@ def build_validation_results(df):
 
     # Timestamp validation
     results.update(check_timestamp_integrity(df))
+    results.update(check_reporting_cutoff(df))
 
     # Status validation
     results.update(check_status_logic(df))
@@ -276,7 +292,7 @@ def build_report(df, validation_results, score_data):
     report = {
         "report_generated_at": datetime.now().isoformat(),
         "dataset": {
-            "file": DATA_PATH,
+            "file": str(DATA_PATH.relative_to(BASE_DIR)),
             "rows": int(len(df)),
             "columns": int(len(df.columns)),
         },
@@ -293,12 +309,12 @@ def export_report(report):
 
     import os
 
-    os.makedirs(os.path.dirname(REPORT_PATH), exist_ok=True)
+    REPORT_PATH.parent.mkdir(parents=True, exist_ok=True)
 
     with open(REPORT_PATH, "w", encoding="utf-8") as file:
         json.dump(report, file, indent=4)
 
-    print(f"\nReport exported to: {REPORT_PATH}")
+    print(f"\nReport exported to: {REPORT_PATH.relative_to(BASE_DIR)}")
 
 
 def print_report(report):

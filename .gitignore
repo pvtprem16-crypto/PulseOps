@@ -7,3 +7,6 @@ venv/
 data/raw/
 data/processed/
 .vscode/
+
+# Local database files
+*.db
