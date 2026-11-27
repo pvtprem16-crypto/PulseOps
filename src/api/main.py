@@ -9,6 +9,9 @@ from src.api.routers import (
     clients,
     services,
     analytics,
+    ml_prediction,
+    prediction_history,
+    interventions,
 )
 
 app = FastAPI(
@@ -37,6 +40,11 @@ app.include_router(teams.router)
 app.include_router(clients.router)
 app.include_router(services.router)
 app.include_router(analytics.router)
+app.include_router(ml_prediction.router, prefix="/api/v1")
+app.include_router(prediction_history.router, prefix="/api/v1")
+app.include_router(interventions.router, prefix="/api/v1")
+
+
 
 
 @app.get("/")

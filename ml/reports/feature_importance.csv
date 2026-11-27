@@ -1,0 +1,53 @@
+feature,importance
+priority_Low,0.30530370806836804
+priority_High,0.14612973846808186
+priority_Medium,0.07156259720754683
+priority_Critical,0.060933559560504974
+created_hour,0.05499584803945805
+created_month,0.04280382777621146
+created_day_of_week,0.03364255048957185
+channel_Portal,0.013932911345918836
+channel_Email,0.012572363901755533
+assigned_team_Network Team,0.010370559977595274
+assigned_team_Service Desk,0.009227580471069642
+assigned_team_Application Team,0.009143848279729788
+client_Omega Systems,0.00911628807380843
+service_Database Services,0.009085018633343253
+service_End User Support,0.008893241310619067
+client_Delta Solutions,0.00879487405740789
+service_Email Services,0.008773467077965962
+category_Database,0.008750843606062587
+category_Hardware,0.008572779454191269
+service_Network Infrastructure,0.00857042509984651
+client_Beta Ltd,0.00831013710285531
+category_Access,0.007713749486566545
+assigned_team_Database Team,0.007609595010846171
+client_Gamma Inc,0.007555339476426706
+channel_Phone,0.007445942823391659
+service_Business Applications,0.007217316968101204
+category_Software,0.007189490696005465
+client_Alpha Corp,0.007036813217894635
+assigned_team_Security Team,0.006908570655504344
+category_Network,0.006752536782260472
+channel_Monitoring,0.0060542207658229805
+subcategory_Account Lock,0.005700242502672889
+subcategory_Installation,0.005613083931596659
+subcategory_Performance,0.005543682115086482
+category_Email,0.005356069756321187
+subcategory_Wi-Fi,0.0046875248727678
+subcategory_Permission,0.004220807028982136
+subcategory_Password Reset,0.004163674531814269
+subcategory_Spam,0.004110438234444123
+subcategory_Connectivity,0.0036537588342138803
+subcategory_Laptop,0.003634165277439243
+subcategory_Application Error,0.0035640039116442233
+subcategory_VPN,0.0034980608594218244
+subcategory_Desktop,0.0033735652187852324
+subcategory_Query Failure,0.0032388781549591373
+subcategory_License,0.0031102497444411153
+subcategory_Printer,0.003061038784021376
+subcategory_Delivery,0.0029172837495175016
+subcategory_Mailbox,0.0028246926545211094
+subcategory_Connection,0.0025577698555084333
+subcategory_DNS,0.002240307130858358
+subcategory_Peripheral,0.00196095896625057

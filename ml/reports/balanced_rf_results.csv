@@ -1,0 +1,2 @@
+model,cv_balanced_accuracy,accuracy,balanced_accuracy,precision,recall,f1,roc_auc,baseline_accuracy,baseline_balanced_accuracy
+Balanced Random Forest,0.7133851833446218,0.6834677419354839,0.6846856099509301,0.8783783783783784,0.6824146981627297,0.7680945347119645,0.6922058655711514,0.7681451612903226,0.5
