@@ -1,4 +1,5 @@
-﻿from fastapi import APIRouter
+﻿
+from fastapi import APIRouter
 from src.api.core.database import get_connection
 
 router = APIRouter(
@@ -109,6 +110,84 @@ def dashboard_overview():
             "avg_resolution_minutes": round(
                 overview["avg_resolution_minutes"] or 0, 2
             ),
+        }
+
+    finally:
+        conn.close()
+
+
+@router.get("/activity")
+def ticket_activity(days: int = 7):
+    if days < 1 or days > 30:
+        return {
+            "error": "Days must be between 1 and 30"
+        }
+
+    conn = get_connection()
+
+    try:
+        cursor = conn.cursor()
+
+        latest_date = cursor.execute("""
+            SELECT MAX(date(created_at)) AS latest_date
+            FROM tickets
+        """).fetchone()["latest_date"]
+
+        if latest_date is None:
+            return {
+                "days": days,
+                "activity": []
+            }
+
+        activity = cursor.execute("""
+            WITH date_range AS (
+                SELECT date(
+                    ?, '-' || (? - 1) || ' days'
+                ) AS start_date
+            )
+
+            SELECT
+                date(created_at) AS activity_date,
+                COUNT(*) AS tickets_created
+
+            FROM tickets
+
+            WHERE date(created_at) >= (
+                SELECT start_date FROM date_range
+            )
+            AND date(created_at) <= ?
+
+            GROUP BY date(created_at)
+            ORDER BY activity_date
+        """, (latest_date, days, latest_date)).fetchall()
+
+        result = {
+            row["activity_date"]: row["tickets_created"]
+            for row in activity
+        }
+
+        from datetime import datetime, timedelta
+
+        end_date = datetime.strptime(
+            latest_date, "%Y-%m-%d"
+        ).date()
+
+        chart_data = []
+
+        for i in range(days):
+            current_date = end_date - timedelta(days=days - 1 - i)
+
+            chart_data.append({
+                "date": current_date.strftime("%Y-%m-%d"),
+                "day": current_date.strftime("%a"),
+                "tickets": result.get(
+                    current_date.strftime("%Y-%m-%d"), 0
+                )
+            })
+
+        return {
+            "days": days,
+            "activity": chart_data
         }
 
     finally:
